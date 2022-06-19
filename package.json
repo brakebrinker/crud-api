@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npx tsc -p tsconfig.json",
     "start": "npx ts-node -r dotenv/config main.ts",
-    "start:dev": "npx tsc --watch nodemon -q main.js"
+    "start:dev": "npx tsc --watch nodemon main.js"
   },
   "repository": {
     "type": "git",
