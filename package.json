@@ -7,13 +7,18 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npx tsc -p tsconfig.json",
     "start": "npx ts-node -r dotenv/config main.ts",
-    "start:dev": "npx tsc --watch nodemon main.js"
+    "start:dev": "nodemon -r dotenv/config main.ts",
+    "start:prod": "npx tsc -p tsconfig.json && node -r dotenv/config --enable-source-maps --stack-trace-limit=100 --stack-size=1024 dist/main.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/brakebrinker/crud-api"
   },
-  "keywords": ["nodejs", "crud-api", "brakebrinker"],
+  "keywords": [
+    "nodejs",
+    "crud-api",
+    "brakebrinker"
+  ],
   "author": "brakebrinker",
   "license": "ISC",
   "homepage": "https://github.com/brakebrinker/crud-api#readme",
@@ -24,8 +29,8 @@
     "@types/fs-extra": "^9.0.13",
     "@types/node": "^16.11.4",
     "dotenv": "^10.0.0",
+    "nodemon": "^2.0.16",
     "ts-node": "^10.3.1",
     "typescript": "^4.4.4"
   }
 }
-

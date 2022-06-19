@@ -50,8 +50,6 @@ export class UserRepository {
     }
 
     users.push(userData);
-    
-    console.log(users);
 
     return user;
   }
