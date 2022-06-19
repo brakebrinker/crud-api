@@ -21,8 +21,6 @@ export class GetUsersController {
   async getUsers(): Promise<void> {
     const users = await this.userRepository.getAllUsers();
 
-    console.log('vvv: ', users);
-
     await this.app.sendHttpCode({ httpCode: 200 });
     await this.app.sendResponse({ response: users });
   }

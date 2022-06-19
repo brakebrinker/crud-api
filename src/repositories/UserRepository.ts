@@ -14,6 +14,10 @@ type UpdateArgs = {
   readonly user: User;
 }
 
+type DeleteArgs = {
+  readonly user: User;
+}
+
 export class UserRepository {
   async getAllUsers(): Promise<User[]> {
     return await Promise.all(
@@ -63,6 +67,14 @@ export class UserRepository {
     users.splice(userIndex, 1);
 
     users.push(updateUser);
+
+    return user;
+  }
+
+  async delete({user}: DeleteArgs): Promise<User> {
+    const userIndex = users.findIndex((userData) => userData.id === user.id);
+
+    users.splice(userIndex, 1);
 
     return user;
   }

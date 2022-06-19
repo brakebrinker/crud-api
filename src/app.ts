@@ -2,12 +2,11 @@ import { IncomingMessage, RequestListener, ServerResponse } from 'http';
 import { routes } from './consts/routes';
 import { GetUsersController } from './controllers/GetUsersController';
 import { ParseUrlService } from './services/ParseUrlService';
-import { join } from 'path';
 import { GetUserController } from './controllers/GetUserController';
 import { CreateUserController } from './controllers/CreateUserController';
 import { parse } from 'querystring';
-import { UserData } from './data';
 import { UpdateUserController } from './controllers/UpdateUserController';
+import { DeleteUserController } from './controllers/DeleteUserController';
 
 
 type CreateArgs = {
@@ -141,6 +140,30 @@ export class App {
               });
             });
 
+            break;
+          default:
+            await this.applyResult({
+              result: { error: 'Resource not found' },
+              httpCode: 404,
+            });
+        }
+      }
+
+      if (req.method === 'DELETE') {
+        const parameterValue = ParseUrlService.getParameterValue({
+          url: req.url,
+        });
+
+        switch (req.url) {
+          case `${routes.users}/${parameterValue}`:
+            const isValidUuid = await this.validateUuidParameter({ parameterValue });
+
+            if (!isValidUuid) {
+              break;
+            }
+
+            const deleteUserController = new DeleteUserController({ app: this });
+            await deleteUserController.deleteUser({ userId: parameterValue });
             break;
           default:
             await this.applyResult({
