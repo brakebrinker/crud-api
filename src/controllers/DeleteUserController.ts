@@ -1,8 +1,5 @@
-import { User } from '../entities/User';
 import { UserRepository } from '../repositories/UserRepository';
 import { App } from '../app';
-import { ParsedUrlQuery } from 'querystring';
-import { CreateUserDto } from '../dto/CreateUserDto';
 
 type CreateArgs = {
   readonly app: App;

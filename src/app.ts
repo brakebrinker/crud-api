@@ -172,6 +172,15 @@ export class App {
             });
         }
       }
+
+      req.on('error', async (e) => {
+        await this.applyResult({
+          result: { error: `Problem with request: ${e.message}` },
+          httpCode: 500,
+        });
+
+        console.error(`Problem with request: ${e.message}`);
+      });
     };
   }
 

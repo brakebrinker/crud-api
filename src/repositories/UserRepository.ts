@@ -43,13 +43,15 @@ export class UserRepository {
 
   async save({user}: SaveArgs): Promise<User> {
     const userData = <UserData>{
-      id: randomUUID(),
+      id: user.id,
       username: user.username,
       age: user.age,
       hobbies: user.hobbies,
     }
 
     users.push(userData);
+    
+    console.log(users);
 
     return user;
   }
