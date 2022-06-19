@@ -7,6 +7,7 @@ import { GetUserController } from './controllers/GetUserController';
 import { CreateUserController } from './controllers/CreateUserController';
 import { parse } from 'querystring';
 import { UserData } from './data';
+import { UpdateUserController } from './controllers/UpdateUserController';
 
 
 type CreateArgs = {
@@ -60,8 +61,6 @@ export class App {
 
         switch (req.url) {
           case routes.users:
-            console.log('dddd: ', req.url);
-
             const getUsersController = new GetUsersController({ app: this });
             await getUsersController.getUsers();
             break;
@@ -84,6 +83,10 @@ export class App {
       }
 
       if (req.method === 'POST') {
+        const parameterValue = ParseUrlService.getParameterValue({
+          url: req.url,
+        });
+
         switch (req.url) {
           case routes.users:
             let body = '';
@@ -101,6 +104,41 @@ export class App {
 
               const createUserController = new CreateUserController({ app: this });
               await createUserController.createUser({ userData });
+            });
+
+            break;
+          case `${routes.users}/${parameterValue}`:
+
+            const splittedParameterValue = parameterValue.split('?')[0];
+
+            const isValidUuid = await this.validateUuidParameter({
+              parameterValue: splittedParameterValue
+            });
+
+            if (!isValidUuid) {
+              break;
+            }
+
+            let bodyUpdate = '';
+
+            req.on('data', async (data) => {
+              bodyUpdate += data;
+
+              if (bodyUpdate.length > 1e6) {
+                req.connection.destroy();
+              }
+            });
+
+            req.on('end', async () => {
+              const userData = parse(bodyUpdate);
+
+              const updateUserController = new UpdateUserController({ app: this });
+              await updateUserController.updateUser({
+                id: splittedParameterValue,
+                username: userData.username !== undefined ? userData.username.toString() : undefined,
+                age: userData.age !== undefined ? userData.age.toString() : undefined,
+                hobbies: userData.hobbies !== undefined ? userData.hobbies.toString().split(',') : undefined,
+              });
             });
 
             break;

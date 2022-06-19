@@ -10,6 +10,10 @@ type SaveArgs = {
   readonly user: User;
 }
 
+type UpdateArgs = {
+  readonly user: User;
+}
+
 export class UserRepository {
   async getAllUsers(): Promise<User[]> {
     return await Promise.all(
@@ -42,6 +46,23 @@ export class UserRepository {
     }
 
     users.push(userData);
+
+    return user;
+  }
+
+  async update({user}: UpdateArgs): Promise<User> {
+    const userIndex = users.findIndex((userData) => userData.id === user.id);
+
+    const updateUser = <UserData>{
+      id: user.id,
+      username: user.username,
+      age: user.age,
+      hobbies: user.hobbies,
+    }
+
+    users.splice(userIndex, 1);
+
+    users.push(updateUser);
 
     return user;
   }

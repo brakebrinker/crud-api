@@ -6,7 +6,7 @@ type IsParameterValueUuidArgs = {
   readonly parameterValue: string;
 }
 
-const UUID_REGEXP = /^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/gi;
+const UUID_REGEXP = /[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}/;
 
 export class ParseUrlService {
   static getParameterValue({ url }: GetParameterValue): string | null {

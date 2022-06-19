@@ -1,18 +1,21 @@
 import { User } from '../entities/User';
 import { UserRepository } from '../repositories/UserRepository';
 import { App } from '../app';
-import { users } from '../data';
-import { routes } from '../consts/routes';
+import { ParsedUrlQuery } from 'querystring';
+import { CreateUserDto } from '../dto/CreateUserDto';
 
 type CreateArgs = {
   readonly app: App;
 }
 
-type GetUserArgs = {
-  readonly userId: string;
+type UpdateUserArgs = {
+  readonly id: string;
+  readonly username?: string;
+  readonly age?: string;
+  readonly hobbies?: Array<string>;
 }
 
-export class GetUserController {
+export class UpdateUserController {
   readonly app: App;
 
   readonly userRepository: UserRepository;
@@ -22,10 +25,10 @@ export class GetUserController {
     this.userRepository = new UserRepository();
   }
 
-  async getUser({ userId }: GetUserArgs): Promise<void> {
+  async updateUser({ id, username, age, hobbies }: UpdateUserArgs): Promise<void> {
     const user = await this.userRepository.getOneById({
-      userId,
-    });
+      userId: id,
+    })
 
     if (user === null) {
       await this.app.sendHttpCode({ httpCode: 404 });
@@ -33,6 +36,14 @@ export class GetUserController {
 
       return;
     }
+
+    user.username = username !== undefined ? username : user.username;
+    user.age = age !== undefined ? parseInt(age) : user.age;
+    user.hobbies = hobbies !== undefined ? user.hobbies.concat(hobbies): user.hobbies;
+
+    await this.userRepository.update({
+      user,
+    });
 
     await this.app.sendHttpCode({ httpCode: 200 });
     await this.app.sendResponse({ response: user });
