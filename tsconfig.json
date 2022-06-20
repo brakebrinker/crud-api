@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "module": "CommonJS",
+    "target": "ES2021",
+    "outDir": "./dist"
+  },
+  "exclude": [
+    "./.vscode/*",
+    "./dist/*",
+    "./node_modules/*",
+    "./scripts/*",
+  ]
+}
